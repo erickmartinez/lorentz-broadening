@@ -119,10 +119,11 @@ int main(int argc, char **argv) {
 			sumi = 1 + squarex;
 			y += (data[j][1] * factor / sumi);
 		}
-		output_file.precision(10);
+		output_file.precision(round(log10(fabs(DX))));
 		output_file.setf(ios::fixed, ios::floatfield);
 		output_file << x << "\t";
 		output_file << scientific;
+		output_file.precision(10);
 		output_file << y << endl;
 	}
 
