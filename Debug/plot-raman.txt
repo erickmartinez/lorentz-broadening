@@ -1,0 +1,8 @@
+
+set xlabel 'Wavenumbers (cm^{-1})' font 'Helvetica,30'
+set ylabel 'Intensity (a. u.)' font 'Helvetica,30'
+set title 'Raman Spectrum'  font 'Helvetica,30'
+set terminal postscript eps enhanced color font 'Helvetica,20' linewidth 2
+set output 'Raman.eps'
+plot  "broaden.dat" using 1:2 with lines title 'Predicted' 
+pause -1    # Wait until a carriage return is hit
