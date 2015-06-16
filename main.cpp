@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	steps = (int) rint((XENDS - XSTART) / dx);
+	steps = (int) rint(fabs((XENDS - XSTART) / dx));
 
 	/* Open input file */
 	input_file.open(inFileNameStr.c_str());
