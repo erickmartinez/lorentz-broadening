@@ -31,15 +31,16 @@ int main(int argc, char **argv) {
 	double broadening = BROAD;
 	double gamma;
 	const double PI = 4 * atan(1.0);
-	double x, y;
-	double steps = (int) rint((XENDS - XSTART) / DX);
+	double x, y, dx;
+	dx = DX;
+	double steps;
 	vector<vector<double> > dataOut(steps, vector<double>(2));
 	double factor, sumi;
 	double squarex;
 	/* Command line initialization */
 	if (argc < 5) {
 		cout << "Usage is lorentz-broadening -in <input file> -out "
-				"<output file> [-b <broadening>]" << endl;
+				"<output file> [-b <FWHM> -dx <spacing> ]" << endl;
 	} else {
 		for (int i = 1; i < argc; i++) {
 			if (i + 1 != argc) { // Check that we haven't finished parsing already
@@ -47,13 +48,16 @@ int main(int argc, char **argv) {
 				if (std::string(argv[i]).compare("-in") == 0) {
 					inFileNameStr = argv[i + 1];
 					argumentcheck++;
-					/* Check for the density input */
+					/* Check for the output filename */
 				} else if (std::string(argv[i]).compare("-out") == 0) {
 					outFileNameStr = argv[i + 1];
 					argumentcheck++;
-					/* Check for the number of atoms input */
+					/* Check for the FWHM */
 				} else if (std::string(argv[i]).compare("-b") == 0) {
 					broadening = atof(argv[i + 1]);
+					/* Check the x spacing */
+				} else if (std::string(argv[i]).compare("-dx") == 0) {
+					dx = atof(argv[i + 1]);
 				}
 			}
 		}
@@ -64,6 +68,8 @@ int main(int argc, char **argv) {
 			exit(0);
 		}
 	}
+
+	steps = (int) rint((XENDS - XSTART) / dx);
 
 	/* Open input file */
 	input_file.open(inFileNameStr.c_str());
@@ -110,16 +116,16 @@ int main(int argc, char **argv) {
 	}
 
 	for (int i = 0; i < steps; ++i) {
-		x = i * DX;
+		x = i * dx;
 		y = 0.0;
 		for (int j = 0; j < lines; ++j) {
-			squarex = i * DX - data[j][0];
+			squarex = i * dx - data[j][0];
 			squarex /= gamma;
 			squarex *= squarex;
 			sumi = 1 + squarex;
 			y += (data[j][1] * factor / sumi);
 		}
-		output_file.precision(round(log10(fabs(DX))));
+		output_file.precision(round(log10(fabs(dx))));
 		output_file.setf(ios::fixed, ios::floatfield);
 		output_file << x << "\t";
 		output_file << scientific;
