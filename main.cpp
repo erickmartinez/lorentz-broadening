@@ -105,6 +105,7 @@ int main(int argc, char **argv) {
 
 	cout << "gamma = " << gamma << endl;
 
+	/* Area normalization factor (can be set to 1 to normalize to height) */
 	factor = 1.0 / (gamma * PI);
 
 	/* Open output file */
